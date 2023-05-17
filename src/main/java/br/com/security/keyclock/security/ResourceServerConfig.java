@@ -23,18 +23,16 @@ public class ResourceServerConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        System.out.println("t0");
+
         http.authorizeHttpRequests()
-                .requestMatchers(HttpMethod.GET, "/security/**").hasRole(ADMIN)
-                .anyRequest().permitAll();
-//                .anyRequest().authenticated();
-        System.out.println("t1");
-        System.out.println(http);
+                .requestMatchers(HttpMethod.GET, "/security/admin").hasRole(ADMIN)
+                .requestMatchers(HttpMethod.GET, "/security/user").hasRole(USER)
+                .anyRequest().authenticated();
+
         http.oauth2ResourceServer()
                 .jwt()
                 .jwtAuthenticationConverter(jwtAuthConverter);
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        System.out.println("t2");
         return http.build();
     }
 }

@@ -29,8 +29,6 @@ public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationTo
 
     @Override
     public AbstractAuthenticationToken convert(Jwt jwt) {
-        System.out.println("here 2");
-        System.out.println(jwt);
         Collection<GrantedAuthority> authorities = Stream.concat(
                 jwtGrantedAuthoritiesConverter.convert(jwt).stream(),
                 extractResourceRoles(jwt).stream()).collect(Collectors.toSet());
@@ -38,8 +36,7 @@ public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationTo
     }
 
     private String getPrincipalClaimName(Jwt jwt) {
-        System.out.println("here 3");
-        System.out.println(jwt);
+
         String claimName = JwtClaimNames.SUB;
         if (properties.getPrincipalAttribute() != null) {
             claimName = properties.getPrincipalAttribute();
@@ -54,6 +51,7 @@ public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationTo
         if (resourceAccess == null
                 || (resource = (Map<String, Object>) resourceAccess.get(properties.getResourceId())) == null
                 || (resourceRoles = (Collection<String>) resource.get("roles")) == null) {
+
             return Set.of();
         }
         return resourceRoles.stream()
